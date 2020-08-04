@@ -18,11 +18,3 @@ module.exports = (app) => {
 		res.send(req.user);
 	});
 };
-
-// mongo
-// jtq0djCoIfu58l5k
-// mongodb+srv://prodUser:<password>@cluster0.8apja.mongodb.net/<dbname>?retryWrites=true&w=majority
-
-// google
-// 40542226276-849ligbr05qgqd5b2ru33btaj1jsekek.apps.googleusercontent.com
-// G7SSxK8GejRT6tTtIj_CzH01
