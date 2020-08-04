@@ -26,6 +26,9 @@ app.use(passport.session());
 
 // import routes
 require("./routes/authRoutes")(app);
+app.get("/", (req, res) => {
+	res.send({ hi: "there" });
+});
 
 // listen to heroku port or locl port 3000
 const PORT = process.env.PORT || 3000;
