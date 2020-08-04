@@ -1,31 +1,32 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const cookieSession = require("cookie-session");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const keys = require("./config/keys");
+require("./models/user");
+require("./services/passport");
 
 const app = express();
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecret,
-      callbackURL: "/auth/google/callback",
-    },
-    (accessToken, refreshToken, profile, done) => {
-      console.log(accessToken);
-    }
-  )
+// connect app to mongoDB
+mongoose.connect(keys.mongoURI, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+});
+
+// config app use
+app.use(
+	cookieSession({
+		maxAge: 30 * 24 * 60 * 60 * 1000,
+		keys: [keys.cookieKey],
+	})
 );
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
+// import routes
+require("./routes/authRoutes")(app);
 
-app.get("/auth/google/callback", passport.authenticate("google"));
-
+// listen to heroku port or locl port 3000
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
